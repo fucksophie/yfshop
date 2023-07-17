@@ -9,7 +9,7 @@ local files = {
     "Krypton.lua"
 }
 
-local commitID = "05e7d1cca541ef45bc1106dea9983338f8ec80f7"
+local commitID = "fe14bed5722f483e77ab4479c72a2ae13656a914"
 local cdn = "https://raw.githubusercontent.com/yourfriendoss/yfshop/"..commitID.."/src/"
 
 for k,v in pairs(files) do
@@ -27,4 +27,4 @@ print("..")
 print("1. copy `yfshop/settings-example.lua` to `yfshop/settings.lua`")
 print("2. edit `yfshop/settings.lua`")
 print("3. start yfshop by `cd yfshop` `yfshop`. you can setup a startup script by")
-print('   writing `shell.run("yfshop/yfshop.lua")` in your `startup.lua` file.')
+print('   copying the startup.lua file from the github repository.')
