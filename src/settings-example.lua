@@ -1,5 +1,12 @@
+--[[
+  You need a new wallet to use for this shop.
+  Insert it's privateKey and it's address below.
+
+  Other configuration options should be self-explanatory.
+]]
+
 return {
-  ["address"] = "KHIHELLOWLRD",
+  ["address"] = "khelloworl",
   ["privateKey"] = "MyPrivateKey",
   ["topbar"] = {
     ["managedBy"] = "exampleUser",
