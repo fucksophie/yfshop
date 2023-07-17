@@ -9,7 +9,7 @@ local files = {
     "Krypton.lua"
 }
 
-local commitID = "fe14bed5722f483e77ab4479c72a2ae13656a914"
+local commitID = "f3af4ff75bc35d9611637e823c76149e49557efc"
 local cdn = "https://raw.githubusercontent.com/yourfriendoss/yfshop/"..commitID.."/src/"
 
 for k,v in pairs(files) do
