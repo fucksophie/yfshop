@@ -1,19 +1,26 @@
 print("installing yfshop")
 local files = {
+    -- actual code
     "yfshop.lua",
     "krist.lua",
-    "settings-example.lua",
     "stock.lua",
     "topbar.lua",
-    "abstractInvLib.lua",
-    "Krypton.lua"
+    -- libs
+    "lib/abstractInvLib.lua",
+    "lib/Krypton.lua"
 }
 
 local commitID = "f3af4ff75bc35d9611637e823c76149e49557efc"
 local cdn = "https://raw.githubusercontent.com/yourfriendoss/yfshop/"..commitID.."/src/"
 
+if not fs.exists("yfshop/settings.lua") then
+    -- downloads example settings if settings.lua is missing
+    table.insert(files, "settings-example.lua")
+end
+
 for k,v in pairs(files) do
     print("> Downloading file: "..v)
+
     local file = io.open("yfshop/"..v, "w")
     if file == nil then return end
     file:write(http.get(cdn..v).readAll())

@@ -1,4 +1,4 @@
-local abstractInvLib = require('abstractInvLib')
+local abstractInvLib = require('lib.abstractInvLib')
 
 local stock = {
   ["ids"] = {},

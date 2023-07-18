@@ -15,7 +15,7 @@ function krist.start(settings, privateKey, stock)
   krist.settings = settings
   krist.stock = stock
 
-  local Krypton = require("Krypton")
+  local Krypton = require("lib.Krypton")
 
   krist.krypton = Krypton.new({
     privateKey = privateKey,
