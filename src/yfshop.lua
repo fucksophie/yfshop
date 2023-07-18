@@ -15,8 +15,10 @@
   |-----------------------------|
   |Name Stock Price M-name hello| <-- 
   |Hi   2     0.1   hit    world|  Should be doable on either side
-  |-----------------------------|
+  |--|
 ]]
+
+-- Stock buttons should autoarrange (in a grid) themselves and not just be a bunch of lines.
 
 local settings = require("settings")
 
