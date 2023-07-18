@@ -1,3 +1,23 @@
+-- TODO:
+-- There are TODO's scattered around this project.
+-- If you fix one of them, please submit a pull request.
+
+-- The shop currently has limited color configuration.
+-- Every background, foreground and whatnot should be configurable.
+
+-- The PayRow should have several types - middle, left and right.
+
+-- The stock screen should have a width too, so I can squeeze in text
+-- on either side of the stock screen. Example:
+--[[
+  |-----------------------------|
+  | ME.KST       [concrete] hi  |
+  |-----------------------------|
+  |Name Stock Price M-name hello| <-- 
+  |Hi   2     0.1   hit    world|  Should be doable on either side
+  |-----------------------------|
+]]
+
 local settings = require("settings")
 
 function renderPayRow(monitor)
@@ -42,17 +62,25 @@ function topbar.onClick()
   stock.render(monitor, topbarY, topbar)
 end
 
-function detectResize()
+function detectResize() -- TODO: Something is HEAVILY wrong with rezising.
+  -- I am not precisely sure what it is, but after an resize the monitor renders incorrectly.
   while true do
     local _, _ = os.pullEvent("monitor_resize")
     renderPayRow(monitor)
+    monitor.setBackgroundColor(colors.black)
+    monitor.setTextColor(colors.white)
     local topbarY2 = topbar.render(monitor)
+    monitor.setBackgroundColor(colors.black)
+    monitor.setTextColor(colors.white)
     stock.render(monitor, topbarY2, topbar)
+    monitor.setBackgroundColor(colors.black)
+    monitor.setTextColor(colors.white)
   end
 end
 
 function periodicUpdate()
-  local timer = os.startTimer(5)
+  local timer = os.startTimer(5) -- TODO: I should figure out how
+  -- to update stock automatically, not through a updater like this one
 
   while true do
     local event, tmr = os.pullEvent("timer")

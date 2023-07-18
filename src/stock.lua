@@ -10,22 +10,24 @@ function stock.setCategories(categories)
 end
 
 function stock.drawRow(monitor, y, row)
+  -- TODO: These numbers SHOULD scale automatically.
+  -- instead of being hard coded.
   local x = 1;
   monitor.setCursorPos(x, y)
-  monitor.write(row[1]:sub(0, 4+12)) -- 4 (Buffer: 14)
+  monitor.write(row[1]:sub(0, 4+12)) -- (Name: 4) (Buffer: 12)
 
   x = x + 4 + 12
   monitor.setCursorPos(x, y)
-  monitor.write(row[2]:sub(0, 5+3)) -- 5 (Buffer 3)
+  monitor.write(row[2]:sub(0, 5+3)) -- (Stock: 5) (Buffer 3)
 
   x = x + 5 + 3
   monitor.setCursorPos(x, y)
-  monitor.write(row[3]:sub(0, 5+4)) -- 5 (Buffer 2)
+  monitor.write(row[3]:sub(0, 5+2)) -- (Price: 6) (Buffer 2)
 
   x = x + 5 + 2
 
   monitor.setCursorPos(x, y)
-  monitor.write(row[4]:sub(0, 6))
+  monitor.write(row[4]:sub(0, 6)) -- (M-name: 6) (Buffer 0)
 end
 
 function stock.render(monitor, rawY, topbar)
@@ -86,7 +88,8 @@ function stock.buy(metaname, kst) -- returns true if a return is required
     overflow = math.floor(overflowKst)
   end
 
-  local stack = 64
+  local stack = 64 -- TODO: Get stack based on invItem.id, instead of hardcoding it.
+  -- This means items such as Ender Pearls will entierly break the whole shop.
 
   for k, v in pairs(inv.list()) do
     if v.name == invItem.id then
@@ -108,7 +111,7 @@ function stock.buy(metaname, kst) -- returns true if a return is required
 end
 
 function stock.calculate()
-  stock.ids = {} -- TODO: maybe only check actually needed items? not sure if it'll improve perf at all though
+  stock.ids = {}
   local invs = { peripheral.find("inventory") }
 
   for type, inv in pairs(invs) do
