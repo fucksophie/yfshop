@@ -1,9 +1,4 @@
 -- TODO:
--- There are TODO's scattered around this project.
--- If you fix one of them, please submit a pull request.
-
--- The PayRow should have several types - middle, left and right.
-
 -- Stock buttons should autoarrange (in a grid) themselves and not just be a bunch of lines.
 
 local settings = require("settings")
@@ -15,15 +10,24 @@ function renderPayRow(monitor)
   local width, height = monitor.getSize()
 
   local str = "/pay "..settings.address.." <price> <metaname>"
-
+  
   if string.find(settings.address, "@") then
     str = "/pay <metaname>"..settings.address.." <price>"
   end
-
+  
   monitor.setCursorPos(1, height);
   monitor.write(str.rep(" ", width))
-  monitor.setCursorPos(1, height);
-  monitor.write(str)
+  
+  if settings.addressRowPosition == "left" then
+    monitor.setCursorPos(1, height);
+    monitor.write(str)
+  elseif settings.addressRowPosition == "right" then
+    monitor.setCursorPos(width-#str, height);
+    monitor.write(str)
+  elseif settings.addressRowPosition == "center" then
+    monitor.setCursorPos(math.ceil((width-#str)/2), height);
+    monitor.write(str)
+  end
 
   monitor.setBackgroundColor(colors.black)
   monitor.setTextColor(colors.white)

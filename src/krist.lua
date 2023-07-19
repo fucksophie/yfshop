@@ -28,8 +28,8 @@ function krist.eventListener()
       local ret = ""
 
       if string.find(transactionEvent.transaction.metadata, "return") then
-        local split = split(transactionEvent.transaction.metadata, ";")
-        for _,v in pairs(split) do
+        local splitted = split(transactionEvent.transaction.metadata, ";")
+        for _,v in pairs(splitted) do
           if not string.find(v, "=") then
             item = v
           else

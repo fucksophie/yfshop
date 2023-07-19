@@ -2,7 +2,8 @@
         "unused-local",
         "lowercase-global",
         "unused-function",
-        "undefined-field"
+        "undefined-field",
+        "deprecated"
     ],
 "Lua.diagnostics.severity": {
     "redefined-local": "Warning"
