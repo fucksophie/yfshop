@@ -8,10 +8,24 @@
 return {
   ["address"] = "khelloworl",
   ["privateKey"] = "MyPrivateKey",
+  ["addressRowFgColor"] = colors.white,
+  ["addressRowBgColor"] = colors.pink,
   ["topbar"] = {
     ["managedBy"] = "exampleUser",
     ["name"]      = "my shop",
     ["smallText"] = false,
+    ["nameFgColor"] = colors.white,
+    ["nameBgColor"] = colors.pink,
+
+    ["managedFgColor"] = colors.white,
+    ["managedBgColor"] = colors.pink,
+    
+    ["rowFgColor"] = colors.white,
+    ["rowBgColor"] = colors.pink,
+  },
+  ["stock"] = {
+    ["sideText"] = "visit\n3.141.lv\nfor more\ndeals!!",
+    ["side"] = "right"
   },
   ["categories"] = {
     ["ores"] = {

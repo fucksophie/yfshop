@@ -7,7 +7,8 @@ local files = {
     "topbar.lua",
     -- libs
     "lib/abstractInvLib.lua",
-    "lib/Krypton.lua"
+    "lib/Krypton.lua",
+    "lib/split.lua"
 }
 
 local commitID = "f3af4ff75bc35d9611637e823c76149e49557efc"

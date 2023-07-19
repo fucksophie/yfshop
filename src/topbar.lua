@@ -1,4 +1,3 @@
-bigfont = require("/rom/modules/main/bigfont")
 
 function tablelength(T)
   local count = 0
@@ -40,6 +39,31 @@ function topbar.monitorTouch()
   end
 end
 
+function topbar.calculateButtons(monitor)
+  topbar.buttons = {}
+
+  local width, height = monitor.getSize()
+  local categorieIndex = 0
+
+  for k,v in pairs(topbar.categories) do
+    categorieIndex = categorieIndex + 1
+
+    local text = " "..k.." "
+
+    if k == topbar.selected then
+      text = "["..k.."]"
+    end
+
+    table.insert(topbar.buttons, {
+      ["x"] = width-#text,
+      ["y"] = categorieIndex+1,
+      ["w"] = #text,
+      ["h"] = 1,
+      ["name"] = k
+    })
+  end
+end
+
 function topbar.renderCategories(monitor)
   local width, height = monitor.getSize()
 
@@ -57,16 +81,6 @@ function topbar.renderCategories(monitor)
     monitor.setTextColor(v.color)
 
     monitor.write(text)
-
-    if tablelength(topbar.categories) ~= #topbar.buttons then
-      table.insert(topbar.buttons, {
-        ["x"] = width-#text,
-        ["y"] = categorieIndex+1,
-        ["w"] = #text,
-        ["h"] = 1,
-        ["name"] = k
-      })
-    end
   end
 
   monitor.setBackgroundColor(colors.black)
@@ -85,13 +99,20 @@ function topbar.render(monitor)
 
   local calculatedY = 2
 
+  monitor.setTextColor(topbar.settings.nameFgColor)
+  monitor.setBackgroundColor(topbar.settings.nameBgColor)
+
   if topbar.settings.smallText then
     monitor.write(topbar.settings.name)
     calculatedY = calculatedY +1
   else
+    bigfont = require("/rom/modules/main/bigfont")
+
     bigfont.writeOn(monitor, 1, topbar.settings.name, 2, 2)
     calculatedY = calculatedY +3
   end
+  monitor.setTextColor(topbar.settings.managedFgColor)
+  monitor.setBackgroundColor(topbar.settings.managedBgColor)
 
   if topbar.settings.managedBy then
     monitor.setCursorPos(2, calculatedY)
@@ -100,14 +121,17 @@ function topbar.render(monitor)
     calculatedY = calculatedY +1
   end
 
+  monitor.setBackgroundColor(colors.black)
   local categorieIndex = topbar.renderCategories(monitor)
 
   calculatedY = calculatedY + math.max(1, tablelength(topbar.categories))
   monitor.setCursorPos(1, calculatedY)
-  monitor.setBackgroundColor(colors.pink)
-  monitor.setTextColor(colors.black)
+  monitor.setBackgroundColor(topbar.settings.rowBgColor)
+  monitor.setTextColor(topbar.settings.rowFgColor)
   monitor.write(string.rep("-", width))
 
+  monitor.setBackgroundColor(colors.black)
+  monitor.setTextColor(colors.white)
   return calculatedY
 end
 
