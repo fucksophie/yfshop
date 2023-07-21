@@ -37,6 +37,7 @@ local monitor = peripheral.find("monitor")
 local topbar = require("topbar")
 local krist = require("krist")
 local stock = require("stock")
+local shopsync = require("shopsync")
 
 print("yfshop v1")
 
@@ -95,12 +96,24 @@ function periodicUpdate()
   end
 end
 
+function shopsyncUpdater() 
+  local timer = os.startTimer(30) -- Shopsync updates every 30 seconds.
+
+  while true do
+    local event, tmr = os.pullEvent("timer")
+    if tmr == timer then
+      timer = os.startTimer(30)
+      shopsync.update(stock)
+    end
+  end
+end
+
 local startKristManager = true
 
 if startKristManager then
   krist.start(settings, settings.privateKey, stock)
 
-  parallel.waitForAll(krist.eventListener, krist.kryptonListener, topbar.monitorTouch, periodicUpdate, detectResize)
+  parallel.waitForAll(krist.eventListener, krist.kryptonListener, topbar.monitorTouch, periodicUpdate, detectResize, shopsyncUpdater)
 else
-  parallel.waitForAll(topbar.monitorTouch, periodicUpdate, detectResize)
+  parallel.waitForAll(topbar.monitorTouch, periodicUpdate, detectResize, shopsyncUpdater)
 end
