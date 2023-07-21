@@ -44,7 +44,7 @@ function krist.eventListener()
           ret = transactionEvent.transaction.from
         end
       else
-        krist.ws:makeTransaction(ret, transactionEvent.transaction.value, ret.." please include a m-name!")
+        krist.ws:makeTransaction(transactionEvent.transaction.from, transactionEvent.transaction.value, ret.." please include a m-name!")
         return
       end
 
