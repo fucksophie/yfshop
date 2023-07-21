@@ -43,21 +43,19 @@ function krist.eventListener()
           item = transactionEvent.transaction.metadata
           ret = transactionEvent.transaction.from
         end
+        
+        local result = krist.stock.buy(item, transactionEvent.transaction.value)
+
+        if type(result) == "number" then
+          krist.ws:makeTransaction(ret, result, "You spent too much! Overflowed "..result.."KST.")
+        elseif type(result) == "boolean" then
+          if result then
+            krist.ws:makeTransaction(ret, transactionEvent.transaction.value, "Return (of item "..item..") to address "..ret.."")
+          end -- if this is false we do nothing
+        end
       else
         krist.ws:makeTransaction(transactionEvent.transaction.from, transactionEvent.transaction.value, ret.." please include a m-name!")
-        return
       end
-
-      local result = krist.stock.buy(item, transactionEvent.transaction.value)
-
-      if type(result) == "number" then
-        krist.ws:makeTransaction(ret, result, "You spent too much! Overflowed "..result.."KST.")
-      elseif type(result) == "boolean" then
-        if result then
-          krist.ws:makeTransaction(ret, transactionEvent.transaction.value, "Return (of item "..item..") to address "..ret.."")
-        end -- if this is false we do nothing
-      end
-
     end
   end
 end
