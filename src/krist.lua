@@ -26,21 +26,26 @@ function krist.eventListener()
     if transactionEvent.transaction.from ~= krist.settings.address then
       local item = ""
       local ret = ""
-
-      if string.find(transactionEvent.transaction.metadata, "return") then
-        local splitted = split(transactionEvent.transaction.metadata, ";")
-        for _,v in pairs(splitted) do
-          if not string.find(v, "=") then
-            item = v
-          else
-            if string.find(v, "return=") then
-              ret = string.gsub(v, "return=", "")
+      
+      if transactionEvent.transaction.metadata then
+        if string.find(transactionEvent.transaction.metadata, "return") then
+          local splitted = split(transactionEvent.transaction.metadata, ";")
+          for _,v in pairs(splitted) do
+            if not string.find(v, "=") then
+              item = v
+            else
+              if string.find(v, "return=") then
+                ret = string.gsub(v, "return=", "")
+              end
             end
           end
+        else
+          item = transactionEvent.transaction.metadata
+          ret = transactionEvent.transaction.from
         end
       else
-        item = transactionEvent.transaction.metadata
-        ret = transactionEvent.transaction.from
+        krist.ws:makeTransaction(ret, transactionEvent.transaction.value, ret.." please include a m-name!")
+        return
       end
 
       local result = krist.stock.buy(item, transactionEvent.transaction.value)
