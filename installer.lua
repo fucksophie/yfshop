@@ -5,7 +5,6 @@ local files = {
     "krist.lua",
     "stock.lua",
     "topbar.lua",
-    "shopsync.lua",
     -- libs
     "lib/abstractInvLib.lua",
     "lib/Krypton.lua",
