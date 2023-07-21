@@ -95,7 +95,7 @@ function periodicUpdate()
   end
 end
 
-local startKristManager = false
+local startKristManager = true
 
 if startKristManager then
   krist.start(settings, settings.privateKey, stock)
