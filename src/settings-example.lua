@@ -8,7 +8,7 @@ return {
   ["privateKey"] = "MyPrivateKey", -- Input your private key here
   ["addressRowFgColor"] = colors.white,
   ["addressRowBgColor"] = colors.pink,
-  ["adressRowPosition"] = "left", -- Options: "left", "right", "center"
+  ["addressRowPosition"] = "left", -- Options: "left", "right", "center"
   ["topbar"] = {
     ["managedBy"] = "exampleUser", -- Optional setting
     ["name"]      = "my shop", 
