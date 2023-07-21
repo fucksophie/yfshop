@@ -11,7 +11,7 @@ local files = {
     "lib/split.lua"
 }
 
-local commitID = "0dcbe7da0ce2ab17d4a1ad8c679c40c18108042a"
+local commitID = "aa85863638bdfde1a4b8bba415e8ef0abf6326a0"
 local cdn = "https://raw.githubusercontent.com/yourfriendoss/yfshop/"..commitID.."/src/"
 
 if not fs.exists("yfshop/settings.lua") then
