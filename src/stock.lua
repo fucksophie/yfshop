@@ -140,7 +140,7 @@ function stock.buy(metaname, kst) -- returns true if a return is required, or a 
     overflow = math.floor(overflowKst)
   end
 
-  local stack = turtle.getItemDetail() -- TODO: Get stack based on invItem.id, instead of hardcoding it.
+  local stack = 64 -- TODO: Get stack based on invItem.id, instead of hardcoding it.
   -- This means items such as Ender Pearls will entierly break the whole shop.
 
   for k, v in pairs(stock.inv.list()) do
