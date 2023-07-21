@@ -146,9 +146,9 @@ function stock.buy(metaname, kst) -- returns true if a return is required, or a 
   for k, v in pairs(stock.inv.list()) do
     if v.name == invItem.id then
       if amount > 0 then
-        stock.inv.pushItems(turtlename, k, math.min(stack, amount))
+        local pushed = stock.inv.pushItems(turtlename, k+1, math.min(stack, amount))
         turtle.dropUp(math.min(stack, amount))
-        amount = amount - stack
+        amount = amount - pushed
       end
     end
   end
