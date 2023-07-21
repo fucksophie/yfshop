@@ -10,8 +10,13 @@ local files = {
     "lib/Krypton.lua",
     "lib/split.lua"
 }
-
+local args = {...}
 local commitID = "aa85863638bdfde1a4b8bba415e8ef0abf6326a0"
+
+if args[1] then
+    commitID = args[1]
+end
+
 local cdn = "https://raw.githubusercontent.com/yourfriendoss/yfshop/"..commitID.."/src/"
 
 if not fs.exists("yfshop/settings.lua") then

@@ -80,10 +80,12 @@ function stock.render(monitor, rawY, topbar)
   monitor.setTextColor(colors.white)
 
   for k, v in pairs(stock.categories[topbar.selected].items) do
+    y = y + 1
+    local stockValue = "0"
     if stock.ids[v.id] then
-      y = y + 1
-      stock.drawRow(monitor, y, rightGap, rawWidth, { v.name, tostring(stock.ids[v.id]), v.price .. "\164", k });
+      stockValue = tostring(stock.ids[v.id])
     end
+    stock.drawRow(monitor, y, rightGap, rawWidth, { v.name, stockValue, v.price .. "\164", k });
   end
 
   if stock.settings then
