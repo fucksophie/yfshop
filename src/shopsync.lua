@@ -3,6 +3,8 @@ local settings = require("settings")
 local shopsync = {}
 
 function shopsync.update(stock)
+  stock.calculate() -- Good to keep up to date
+  
   local modem = peripheral.wrap("left")
   local x, y, z = gps.locate(5)
   local items = {}
