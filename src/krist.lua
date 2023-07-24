@@ -34,13 +34,11 @@ function krist.eventListener()
   while true do
     local event, transactionEvent = os.pullEvent("transaction")
     if transactionEvent.transaction.from ~= krist.krypton:makev2address(krist.settings.privateKey) then
-
-
       local beingSentToMe = true
-      
+
       if string.find(krist.settings.address, ".kst") then
         if transactionEvent.transaction.sent_name then
-          if transactionEvent.transaction.sent_name ~= split(krist.settings.address, ".kst")[1] then
+          if transactionEvent.transaction.sent_name ~= string.gsub(krist.settings.address, ".kst", "") then
             beingSentToMe = false
           end
         else
