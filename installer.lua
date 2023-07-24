@@ -11,7 +11,7 @@ local files = {
     "lib/split.lua"
 }
 local args = {...}
-local commitID = "aa85863638bdfde1a4b8bba415e8ef0abf6326a0"
+local commitID = "287171e218b069feeb658490cff1c20da535ac97"
 
 if args[1] then
     commitID = args[1]
