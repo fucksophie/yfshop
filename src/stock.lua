@@ -109,9 +109,25 @@ end
 function stock.buy(metaname, kst) -- returns true if a return is required, or a number of kst needed to be returned. false otherwise
   stock.calculate()               -- good to rerun here incase chest has updated
   -- it is good to be 100% sure about info here
+  local wiredModem = nil
+  
+  for _, v in pairs(peripheral.getNames()) do
+    if peripheral.hasType(v, "modem") then
+      local modem = peripheral.wrap(v)
+      if not modem.isWireless() then
+        wiredModem = modem
+      end
+    end
+  end
+  
+  if not wiredModem then
+    print("yfshop/stock.lua could not find a wired modem connected to this turtle.")
+    print("Do not put your wired modem on the left side of the turtle.") -- left side of the turtle is technically the shopsync ender modem
+    return true
+  end
 
-  local turtlename = peripheral.find("modem").getNameLocal()
-
+  local turtlename = wiredModem.getNameLocal()
+  
   local invItem = nil
 
   for categoryid, category in pairs(stock.categories) do

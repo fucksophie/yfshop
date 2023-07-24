@@ -4,8 +4,9 @@
 ]]
 
 return {
-  ["address"] = "khelloworl", -- Imput your address here. You can also use a name (TODO however this is untested! DM yourfriend if you want to help out :)) (such as @me.kst)
+  ["address"] = "khelloworl", -- Imput your address here. You can also use a name
   ["privateKey"] = "MyPrivateKey", -- Input your private key here
+  ["mnameWhitelist"] = {"donate"}, -- add metanames for your address you wish not to be refunded
   ["addressRowFgColor"] = colors.white,
   ["addressRowBgColor"] = colors.pink,
   ["addressRowPosition"] = "left", -- Options: "left", "right", "center"
