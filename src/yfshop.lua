@@ -11,8 +11,8 @@ function renderPayRow(monitor)
 
   local str = "/pay "..settings.address.." <price> <metaname>"
 
-  if string.find(settings.address, "@") then
-    str = "/pay <metaname>"..settings.address.." <price>"
+  if string.find(settings.address, ".kst") then
+    str = "/pay <metaname>@"..settings.address.." <price>"
   end
 
   monitor.setCursorPos(1, height);
