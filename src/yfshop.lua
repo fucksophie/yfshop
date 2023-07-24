@@ -10,14 +10,14 @@ function renderPayRow(monitor)
   local width, height = monitor.getSize()
 
   local str = "/pay "..settings.address.." <price> <metaname>"
-  
+
   if string.find(settings.address, "@") then
     str = "/pay <metaname>"..settings.address.." <price>"
   end
-  
+
   monitor.setCursorPos(1, height);
   monitor.write(str.rep(" ", width))
-  
+
   if settings.addressRowPosition == "left" then
     monitor.setCursorPos(1, height);
     monitor.write(str)
@@ -37,6 +37,7 @@ local monitor = peripheral.find("monitor")
 local topbar = require("topbar")
 local krist = require("krist")
 local stock = require("stock")
+local shopsync = require("shopsync")
 
 print("yfshop v1")
 
@@ -44,7 +45,7 @@ stock.setSettings(settings.stock)
 topbar.loadSettings(settings.topbar)
 topbar.setCategories(settings.categories)
 
-for k,v in pairs(settings.categories) do 
+for k,v in pairs(settings.categories) do
   topbar.selected = k;
   break
 end
@@ -85,7 +86,7 @@ function periodicUpdate()
       stock.calculate()
       stock.render(monitor, topbarY, topbar)
       for k, side in pairs(redstone.getSides()) do
-        if redstone.getOutput(side) then      
+        if redstone.getOutput(side) then
           redstone.setOutput(side, false)
         else
           redstone.setOutput(side, true)
@@ -95,12 +96,39 @@ function periodicUpdate()
   end
 end
 
+
+local modem = peripheral.wrap("left")
+
+if not modem then
+  print("Modem was not found. Shopsync will not be enabled.")
+  print("Add an **ENDER MODEM** **IN THE 1ST SLOT** and restart yfshop to enable shopsync support.")
+else
+  modem.open(9773)
+end
+
+function shopsyncUpdater()
+  if not modem then -- if there is no modem it'll just stop ticking it
+    return
+  end
+
+  local timer = os.startTimer(30) -- Shopsync updates every 30 seconds.
+
+  while true do
+    local event, tmr = os.pullEvent("timer")
+    if tmr == timer then
+      timer = os.startTimer(30)
+
+      shopsync.update(stock)
+    end
+  end
+end
+
 local startKristManager = true
 
 if startKristManager then
   krist.start(settings, settings.privateKey, stock)
 
-  parallel.waitForAll(krist.eventListener, krist.kryptonListener, topbar.monitorTouch, periodicUpdate, detectResize)
+  parallel.waitForAll(krist.eventListener, krist.kryptonListener, topbar.monitorTouch, periodicUpdate, detectResize, shopsyncUpdater)
 else
-  parallel.waitForAll(topbar.monitorTouch, periodicUpdate, detectResize)
+  parallel.waitForAll(topbar.monitorTouch, periodicUpdate, detectResize, shopsyncUpdater)
 end
