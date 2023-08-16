@@ -83,10 +83,10 @@ function krist.eventListener()
             local result = krist.stock.buy(item, transactionEvent.transaction.value)
 
             if type(result) == "number" then
-              krist.ws:makeTransaction(ret, result, "You spent too much! Overflowed "..result.."KST.")
+              krist.ws:makeTransaction(ret, result, "message=You spent too much! Overflowed "..result.."KST.")
             elseif type(result) == "boolean" then
               if result then
-                krist.ws:makeTransaction(ret, transactionEvent.transaction.value, "Return (of item "..item..") to address "..ret.."")
+                krist.ws:makeTransaction(ret, transactionEvent.transaction.value, "message=Return (of item "..item..") to address "..ret.."")
               end -- if this is false we do nothing
             end
           end

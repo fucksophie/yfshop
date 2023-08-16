@@ -161,18 +161,25 @@ function stock.buy(metaname, kst) -- returns true if a return is required, or a 
   local stack = 64 -- TODO: Get stack based on invItem.id, instead of hardcoding it.
   -- This means items such as Ender Pearls will entierly break the whole shop.
 
+  local mPushed = 0
   for k, v in pairs(stock.inv.list()) do
     if v.name == invItem.id then
       if amount > 0 then
         local pushed = stock.inv.pushItems(turtlename, k, math.min(stack, amount))
         turtle.dropUp(math.min(stack, amount))
         amount = amount - pushed
+        mPushed = mPushed + pushed
       end
     end
   end
 
   stock.calculate()
 
+  local priceForPushed = invItem.price * mPushed
+  local mOverflow = math.floor(kst - priceForPushed)
+  if mOverflow > 0 then
+    return mOverflow
+  end
   if overflow >= 1 then
     return overflow
   else

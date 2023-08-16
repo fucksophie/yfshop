@@ -13,7 +13,7 @@ return {
   ["topbar"] = {
     ["managedBy"] = "exampleUser", -- Optional setting
     ["name"]      = "my shop", 
-    ["smallText"] = false, -- `false` renders text normally, `true` renders text with bigfont. Requires bigfont library in sc3 directory
+    ["smallText"] = false, -- `true` renders text normally, `false` renders text with bigfont. Requires bigfont library in sc3 directory
     ["nameFgColor"] = colors.white,
     ["nameBgColor"] = colors.pink,
 
