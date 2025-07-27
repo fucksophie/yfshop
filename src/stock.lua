@@ -1,203 +1,203 @@
 local abstractInvLib = require('lib.abstractInvLib')
 
 local stock = {
-  ["ids"] = {},
-  ["categories"] = {},
-  ["inv"] = {},
-  ["settings"] = {}
+    ["ids"] = {},
+    ["categories"] = {},
+    ["inv"] = {},
+    ["settings"] = {}
 }
 
 function stock.setSettings(settings)
-  stock.settings = settings
+    stock.settings = settings
 end
 
 function stock.setCategories(categories)
-  stock.categories = categories
+    stock.categories = categories
 end
+
 --monitor, y + 1, rightGap, rawWidth, row
 function stock.drawRow(monitor, y, rightGap, width, row)
-  local x = 1
+    local x = 1
 
-  if rightGap ~= nil and rightGap ~= 0 then
-    x = rightGap+2
-    width = width-rightGap
-  end
+    if rightGap ~= nil and rightGap ~= 0 then
+        x = rightGap + 2
+        width = width - rightGap
+    end
 
-  local currentW = 1;
-  
-  monitor.setCursorPos(x, y)
-  currentW = math.floor(0.41*width)
-  monitor.write(row[1]:sub(0, currentW))
-  x = x + currentW
+    local currentW = 1;
 
-  monitor.setCursorPos(x, y)
-  currentW = math.floor(0.21*width)
-  monitor.write(row[2]:sub(0, currentW))
-  x = x + currentW
+    monitor.setCursorPos(x, y)
+    currentW = math.floor(0.41 * width)
+    monitor.write(row[1]:sub(0, currentW))
+    x = x + currentW
 
-  monitor.setCursorPos(x, y)
-  currentW = math.floor(0.21*width)
-  monitor.write(row[3]:sub(0, currentW))
-  x = x + currentW
+    monitor.setCursorPos(x, y)
+    currentW = math.floor(0.21 * width)
+    monitor.write(row[2]:sub(0, currentW))
+    x = x + currentW
 
-  monitor.setCursorPos(x, y)
-  currentW = math.floor(0.15*width)
-  monitor.write(row[4]) 
+    monitor.setCursorPos(x, y)
+    currentW = math.floor(0.21 * width)
+    monitor.write(row[3]:sub(0, currentW))
+    x = x + currentW
+
+    monitor.setCursorPos(x, y)
+    currentW = math.floor(0.15 * width)
+    monitor.write(row[4])
 end
 
 function stock.render(monitor, rawY, topbar)
-  local rawWidth, rawHeight = monitor.getSize()
-  local rightGap = 0
+    local rawWidth, rawHeight = monitor.getSize()
+    local rightGap = 0
 
-  if stock.settings then
-    if stock.settings.sideText then
-      local lines = split(stock.settings.sideText, "\n")
-      local widthAlloc = 0
-      for k,line in pairs(lines) do
-        if #line > widthAlloc then
-          widthAlloc = #line
+    if stock.settings then
+        if stock.settings.sideText then
+            local lines = split(stock.settings.sideText, "\n")
+            local widthAlloc = 0
+            for k, line in pairs(lines) do
+                if #line > widthAlloc then
+                    widthAlloc = #line
+                end
+            end
+            if stock.settings.side == "left" then
+                rawWidth = rawWidth - widthAlloc
+            else
+                rightGap = widthAlloc
+            end
         end
-      end
-      if stock.settings.side == "left" then
-        rawWidth = rawWidth-widthAlloc
-      else
-        rightGap = widthAlloc
-      end
     end
-  end
 
-  for cy = rawY + 1, rawHeight - 1 do
-    for cx = 1, rawWidth do
-      monitor.setCursorPos(cx, cy)
-      monitor.write(" ")
-    end
-  end
-
-  local y = rawY + 1
-  monitor.setTextColor(colors.gray)
-  stock.drawRow(monitor, y, rightGap, rawWidth, { "Name", "Stock", "Price", "M-name" });
-
-  monitor.setTextColor(colors.white)
-
-  for k, v in pairs(stock.categories[topbar.selected].items) do
-    y = y + 1
-    local stockValue = "0"
-    if stock.ids[v.id] then
-      stockValue = tostring(stock.ids[v.id])
-    end
-    stock.drawRow(monitor, y, rightGap, rawWidth, { v.name, stockValue, v.price .. "\164", k });
-  end
-
-  if stock.settings then
-    if stock.settings.sideText then
-      local lines = split(stock.settings.sideText, "\n")
-      for k,line in pairs(lines) do
-
-        if stock.settings.side == "left" then
-          monitor.setCursorPos(rawWidth+1, rawY+k)
-        else
-          monitor.setCursorPos(1, rawY+k)
+    for cy = rawY + 1, rawHeight - 1 do
+        for cx = 1, rawWidth do
+            monitor.setCursorPos(cx, cy)
+            monitor.write(" ")
         end
-        monitor.write(line)
-      end
     end
-  end
-  monitor.setBackgroundColor(colors.black)
-  monitor.setTextColor(colors.white)
+
+    local y = rawY + 1
+    monitor.setTextColor(colors.gray)
+    stock.drawRow(monitor, y, rightGap, rawWidth, { "Name", "Stock", "Price", "M-name" });
+
+    monitor.setTextColor(colors.white)
+
+    for k, v in pairs(stock.categories[topbar.selected].items) do
+        y = y + 1
+        local stockValue = "0"
+        if stock.ids[v.id] then
+            stockValue = tostring(stock.ids[v.id])
+        end
+        stock.drawRow(monitor, y, rightGap, rawWidth, { v.name, stockValue, v.price .. "\164", k });
+    end
+
+    if stock.settings then
+        if stock.settings.sideText then
+            local lines = split(stock.settings.sideText, "\n")
+            for k, line in pairs(lines) do
+                if stock.settings.side == "left" then
+                    monitor.setCursorPos(rawWidth + 1, rawY + k)
+                else
+                    monitor.setCursorPos(1, rawY + k)
+                end
+                monitor.write(line)
+            end
+        end
+    end
+    monitor.setBackgroundColor(colors.black)
+    monitor.setTextColor(colors.white)
 end
 
 function stock.buy(metaname, kst) -- returns true if a return is required, or a number of kst needed to be returned. false otherwise
-  stock.calculate()               -- good to rerun here incase chest has updated
-  -- it is good to be 100% sure about info here
-  local wiredModem = nil
-  
-  for _, v in pairs(peripheral.getNames()) do
-    if peripheral.hasType(v, "modem") then
-      local modem = peripheral.wrap(v)
-      if not modem.isWireless() then
-        wiredModem = modem
-      end
+    stock.calculate()             -- good to rerun here incase chest has updated
+    -- it is good to be 100% sure about info here
+    local wiredModem = nil
+
+    for _, v in pairs(peripheral.getNames()) do
+        if peripheral.hasType(v, "modem") then
+            local modem = peripheral.wrap(v)
+            if not modem.isWireless() then
+                wiredModem = modem
+            end
+        end
     end
-  end
-  
-  if not wiredModem then
-    print("yfshop/stock.lua could not find a wired modem connected to this turtle.")
-    print("Do not put your wired modem on the left side of the turtle.") -- left side of the turtle is technically the shopsync ender modem
-    return true
-  end
 
-  local turtlename = wiredModem.getNameLocal()
-  
-  local invItem = nil
-
-  for categoryid, category in pairs(stock.categories) do
-    for itemid, item in pairs(category.items) do
-      if metaname == itemid then
-        invItem = item
-      end
+    if not wiredModem then
+        print("yfshop/stock.lua could not find a wired modem connected to this turtle.")
+        print("Do not put your wired modem on the left side of the turtle.") -- left side of the turtle is technically the shopsync ender modem
+        return true
     end
-  end
 
-  if not invItem then
-    return true
-  end
+    local turtlename = wiredModem.getNameLocal()
 
-  local amount = math.floor(kst / invItem.price) -- this is how much a user is buying for
-  local availableStock = stock.ids[invItem.id] -- this is how much stock we have
+    local invItem = nil
 
-  if not availableStock then
-    return true
-  end
-
-  local overflow = 0
-
-  if availableStock - amount < 0 then
-    -- user is trying to buy too much
-    local gottenAmount = amount - availableStock -- this is their overflowed items
-    local overflowKst = gottenAmount * invItem.price
-    overflow = math.floor(overflowKst)
-  end
-
-  local stack = 64 -- TODO: Get stack based on invItem.id, instead of hardcoding it.
-  -- This means items such as Ender Pearls will entierly break the whole shop.
-
-  local totalPushed = 0
-  for k, v in pairs(stock.inv.list()) do
-    if v.name == invItem.id then
-      if amount > 0 then
-        local pushed = stock.inv.pushItems(turtlename, k, math.min(stack, amount))
-        turtle.dropUp(math.min(stack, amount))
-        amount = amount - pushed
-        totalPushed = totalPushed + pushed
-      end
+    for categoryid, category in pairs(stock.categories) do
+        for itemid, item in pairs(category.items) do
+            if metaname == itemid then
+                invItem = item
+            end
+        end
     end
-  end
 
-  stock.calculate()
+    if not invItem then
+        return true
+    end
 
-  local priceForPushed = invItem.price * mPushed
-  local underFlow = math.floor(kst - priceForPushed)
-  if underFlow > 0 then
-    return underFlow
-  end
-  if overflow >= 1 then
-    return overflow
-  else
-    return false
-  end
+    local amount = math.floor(kst / invItem.price) -- this is how much a user is buying for
+    local availableStock = stock.ids[invItem.id] -- this is how much stock we have
+
+    if not availableStock then
+        return true
+    end
+
+    local overflow = 0
+
+    if availableStock - amount < 0 then
+        -- user is trying to buy too much
+        local gottenAmount = amount - availableStock -- this is their overflowed items
+        local overflowKst = gottenAmount * invItem.price
+        overflow = math.floor(overflowKst)
+    end
+
+    local stack = 64 -- TODO: Get stack based on invItem.id, instead of hardcoding it.
+    -- This means items such as Ender Pearls will entierly break the whole shop.
+
+    local totalPushed = 0
+    for k, v in pairs(stock.inv.list()) do
+        if v.name == invItem.id then
+            if amount > 0 then
+                local pushed = stock.inv.pushItems(turtlename, k, math.min(stack, amount))
+                turtle.dropUp(math.min(stack, amount))
+                amount = amount - pushed
+                totalPushed = totalPushed + pushed
+            end
+        end
+    end
+
+    stock.calculate()
+
+    local priceForPushed = invItem.price * mPushed
+    local underFlow = math.floor(kst - priceForPushed)
+    if underFlow > 0 then
+        return underFlow
+    end
+    if overflow >= 1 then
+        return overflow
+    else
+        return false
+    end
 end
 
 function stock.calculate()
-  stock.ids = {}
-  stock.inv = abstractInvLib({ peripheral.find("inventory") })
+    stock.ids = {}
+    stock.inv = abstractInvLib({ peripheral.find("inventory") })
 
-  for slot, item in pairs(stock.inv.list()) do
-    if stock.ids[item.name] == nil then
-      stock.ids[item.name] = 0
+    for slot, item in pairs(stock.inv.list()) do
+        if stock.ids[item.name] == nil then
+            stock.ids[item.name] = 0
+        end
+
+        stock.ids[item.name] = stock.ids[item.name] + item.count
     end
-
-    stock.ids[item.name] = stock.ids[item.name] + item.count
-  end
 end
 
 return stock

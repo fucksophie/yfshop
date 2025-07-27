@@ -11,27 +11,27 @@ local files = {
     "lib/Krypton.lua",
     "lib/split.lua"
 }
-local args = {...}
+local args = { ... }
 local commitID = "287171e218b069feeb658490cff1c20da535ac97"
 
 if args[1] then
     commitID = args[1]
 end
 
-local cdn = "https://raw.githubusercontent.com/yourfriendoss/yfshop/"..commitID.."/src/"
+local cdn = "https://raw.githubusercontent.com/fucksophie/yfshop/" .. commitID .. "/src/"
 
 if not fs.exists("yfshop/settings.lua") then
     -- downloads example settings if settings.lua is missing
     table.insert(files, "settings-example.lua")
 end
 
-for k,v in pairs(files) do
-    print("> Downloading file: "..v)
+for k, v in pairs(files) do
+    print("> Downloading file: " .. v)
 
-    local file = io.open("yfshop/"..v, "w")
+    local file = io.open("yfshop/" .. v, "w")
     if file == nil then return end
-    file:write(http.get(cdn..v).readAll())
-    print("> Downloaded: "..v)
+    file:write(http.get(cdn .. v).readAll())
+    print("> Downloaded: " .. v)
 end
 
 print("..")
